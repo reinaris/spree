@@ -5,6 +5,7 @@ attributes *product_attributes
 
 node(:display_price) { |p| p.display_price.to_s }
 node(:has_variants) { |p| p.has_variants? }
+node(:edit_admin_product_path) { |p| edit_admin_product_path(p) }
 
 child :master => :master do
   extends "spree/api/variants/small"
