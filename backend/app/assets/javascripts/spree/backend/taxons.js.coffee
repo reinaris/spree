@@ -7,13 +7,11 @@ $(document).ready ->
     $.ajax
       url: Spree.routes.classifications_api,
       method: 'PUT',
+      dataType:'json',
       data:
         product_id: ui.item.data('product-id'),
         taxon_id: $('#taxon_id').val(),
-        position: ui.item.index(),
-      complete: ->
-        # flash the moved product
-        ui.item.fadeOut(200).fadeIn(300)
+        position: ui.item.index()
 
   if $('#taxon_id').length > 0
     $('#taxon_id').select2
