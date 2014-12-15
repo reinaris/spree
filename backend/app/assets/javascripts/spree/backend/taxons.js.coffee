@@ -10,7 +10,10 @@ $(document).ready ->
       data:
         product_id: ui.item.data('product-id'),
         taxon_id: $('#taxon_id').val(),
-        position: ui.item.index()
+        position: ui.item.index(),
+      complete: ->
+        # flash the moved product
+        ui.item.fadeOut(200).fadeIn(300)
 
   if $('#taxon_id').length > 0
     $('#taxon_id').select2
@@ -60,7 +63,9 @@ $(document).ready ->
         current_taxon_id = $('#taxon_id').val();
         product_taxons = data['taxon_ids']
         product_index = product_taxons.indexOf(parseFloat(current_taxon_id));
+        # remove the current taxon from the product taxon
         product_taxons.splice(product_index, 1);
+        # update the product taxon_ids true the API
         $.ajax
           url: Spree.routes.product_search + "/" + product_id + "?product[taxon_ids]=" + product_taxons, #TODO: check with Rhys
           type: "PUT",
