@@ -1,0 +1,237 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:order_items) %>
+<% end %>
+
+<% content_for :page_tabs do %>
+  <li role="presentation" class="active"><a href="#">Unshipped</a></li>
+  <li role="presentation"><a href="#">Shipped</a></li>
+  <li role="presentation"><a href="#">On hand</a></li>
+<% end %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_orders_index_search">
+    <%= search_form_for [:admin, @search] do |f| %>
+    <div class="row">
+      <div class="date-range-filter col-md-6">
+        <div class="form-group">
+          <%= label_tag :q_created_at_gt, Spree.t(:date_range) %>
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.text_field :created_at_gt, :class => 'datepicker datepicker-from form-control', :value => params[:q][:created_at_gt], :placeholder => Spree.t(:start) %>
+            </div>
+            <div class="col-md-6">
+              <%= f.text_field :created_at_lt, :class => 'datepicker datepicker-to form-control', :value => params[:q][:created_at_lt], :placeholder => Spree.t(:stop) %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <%= label_tag :order_email_cont, Spree.t(:email) %>
+          <%= f.text_field :order_email_cont, class: 'form-control js-quick-search-target js-presentable-filter' %>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <%= label_tag :q_state_eq, Spree.t(:status) %>
+          <%= f.select :state_eq, Spree::InventoryUnit.state_machines[:state].states.collect {|s| [Spree.t("state_machine_states.#{s.name}"), s.value]}, {:include_blank => true}, :class => 'select2 js-presentable-filter' %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <%= label_tag :order_number_eq, Spree.t(:order) %>
+          <%= f.text_field :order_number_eq, class: 'form-control js-presentable-filter' %>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <%= label_tag :shipment_number_eq, Spree.t(:shipment) %>
+          <%= f.text_field :shipment_number_eq, class: 'form-control js-presentable-filter' %>
+        </div>
+      </div>
+    </div>
+    <div data-hook="admin_orders_index_search_buttons" class="form-actions">
+      <%= button Spree.t(:filter_results), 'search' %>
+    </div>
+    <% end %>
+  </div>
+<% end %>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create a ..</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="table-active-filters js-filters"></div>
+
+<%= render :partial => 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+
+<% if @collection.present? %>
+  <div class="row">
+    <div class="col-md-12 js-table-data">
+      <table class="table" id="listing_documents">
+        <thead>
+          <tr>
+            <th>
+              <%= check_box_tag "temp_index_checkbox_main",'1', false, :class => 'js-index-checkbox-main' %>
+            </th>
+            <th><%= Spree.t(:date) %></th>
+            <th colspan="2"><%= Spree.t(:item) %></th>
+            <th></th>
+            <th><%= Spree.t(:email) %></th>
+            <th><%= Spree.t(:name) %></th>
+            <th><%= Spree.t(:zipcode) %></th>
+            <th><%= Spree.t(:status) %></th>
+            <th><%= Spree.t(:order) %></th>
+            <th><%= Spree.t(:shipment) %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @collection.each do |inventory_unit| %>
+            <% order = Spree::Order.find(inventory_unit.order_id) %>
+            <% shipment = Spree::Shipment.where(id: inventory_unit.shipment_id).first %>
+            <tr>
+              <td class="row-checkbox">
+                <%= check_box_tag "temp_index_checkbox_main",'1', false, :class => 'js-index-checkbox' %>
+              </td>
+              <td><%= l(order.completed_at).to_date %></td>
+              <td class="image"><%= mini_image inventory_unit.variant, class: "thumbnail" %></td>
+              <td>
+                <%= inventory_unit.variant.name %><br/>
+                <small><%= inventory_unit.variant.options_text %></small>
+              </td>
+              <td class="no-padding-left no-padding-right">
+                <% unless order.user %>
+                  <span class="label label-info"><%= Spree.t(:guest) %></span>
+                <% end %>
+              </td>
+              <td>
+                <span class="filterable js-add-filter" data-ransack-field="q_order_email_cont" data-ransack-value="<%= order.email %>">
+                  <% if order.user %>
+                    <%= content_tag :span, order.email, data: { toggle: "popover", placement: "top", html: true, content: popover_user_info(order.user, order) } %>
+                  <% else %>
+                    <%= content_tag :span, order.email, data: { toggle: "popover", placement: "top", html: true, content: popover_user_info(false, order) } %>
+                  <% end %>
+                </span>
+              </td>
+              <td><%= order.bill_address.full_name %></td>
+              <td><%= order.ship_address.zipcode %></td>
+              <td>
+                <span class="label label-<%= inventory_unit.state.downcase %> filterable js-add-filter" data-ransack-field="q_state_eq" data-ransack-value="<%= inventory_unit.state %>">
+                  <%= Spree.t("state_machine_states.#{inventory_unit.state}") %>
+                </span>
+              </td>
+              <td>
+                <span class="filterable js-add-filter" data-ransack-field="q_order_number_eq" data-ransack-value="<%= order.number %>">
+                  <%= content_tag :span, order.number, data: { toggle: "popover", placement: "top", html: true, content: popover_order_info(order) } %>
+                </span>
+              </td>
+              <td>
+                <% if shipment %>
+                  <span class="filterable js-add-filter" data-ransack-field="q_shipment_number_eq" data-ransack-value="<%= shipment.number %>">
+                    <%= content_tag :span, shipment.number, data: { toggle: "popover", placement: "top", html: true, content: popover_shipment_info(shipment) } %>
+                  </span>
+                <% end %>
+              </td>
+              <td class="actions actions-1">
+                <%= link_to "javascript:;", class: "btn btn-default btn-sm js-user-data-show", data: { id: order.user.id } do %>
+                  <span class="icon icon-user"></span>
+                <% end if order.user %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-3 js-user-data" style="display: none;">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <a href="javascript:;" class="pull-right js-user-data-hide">
+              <span class="icon icon-delete"></span>
+            </a>
+            <%= Spree.t(:user_details) %>
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="js-user-data-content"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= Spree.t(:not_foud) %>
+  </div>
+<% end %>
+
+<%= render :partial => 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+
+<% content_for :head do %>
+  <%= javascript_tag do -%>
+    $(document).ready(function() {
+      $(".js-add-filter").click(function() {
+        var ransack_field = $(this).data("ransack-field");
+        var ransack_value = $(this).data("ransack-value");
+
+        $("#" + ransack_field).val(ransack_value);
+        $("#table-filter form").submit();
+      });
+
+      $(document).on("click", ".js-delete-filter", function() {
+        var ransack_field = $(this).parents(".js-filter").data("ransack-field");
+
+        $("#" + ransack_field).val('');
+        $("#table-filter form").submit();
+      });
+
+      $(".js-presentable-filter").each(function(){
+        if($(this).val()){
+          var ransack_field = $(this).attr("id");
+          var ransack_value = $(this).val();
+          var filter = '<span class="js-filter label label-default" data-ransack-field="' + ransack_field + '">' + ransack_value + '<span class="icon icon-delete js-delete-filter"></span></span>';
+
+          $(".js-filters").show();
+          $(".js-filters").append(filter);
+        }
+      });
+
+      $(".js-user-data-show").click(function(){
+        var user_id = $(this).data("id");
+        $.ajax({
+          url: "/admin/users/" + user_id + "/user_info",
+          success: function(data){
+            $(".js-user-data").show();
+            $(".js-user-data-content").html(data);
+            $(".js-table-data").removeClass("col-md-12");
+            $(".js-table-data").addClass("col-md-9");
+          }
+        });
+      });
+
+      $(".js-user-data-hide").click(function(){
+        $(".js-user-data").hide();
+        $(".js-table-data").addClass("col-md-12");
+        $(".js-table-data").removeClass("col-md-9");
+      });
+
+    });
+  <% end -%>
+<% end %>

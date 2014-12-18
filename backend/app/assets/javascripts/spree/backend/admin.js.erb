@@ -16,6 +16,37 @@ Hopefully, this will evolve into a propper class.
 
 jQuery(function($) {
 
+  $('.js-index-checkbox-main').click(function(){
+    if($(this).prop('checked') == true){
+      $(".js-index-checkbox").prop('checked', true);
+    } else {
+      $(".js-index-checkbox").prop('checked', false);
+    }
+    showHideBatchActions();
+  });
+
+  $('.row-checkbox input').change(function(){
+    showHideBatchActions();
+    if($(this).prop('checked') == false){
+      $(".js-index-checkbox-main").prop('checked', false);
+    }
+  });
+
+  function showHideBatchActions(){
+    var checkedCount = 0;
+    $(".js-index-checkbox").each(function(){
+      if($(this).prop('checked')){
+        checkedCount++;
+      }
+    });
+
+    if(checkedCount > 0){
+      $(".batch-actions").show();
+    } else {
+      $(".batch-actions").hide();
+    }
+  }
+
   // Add some tips
   $('.with-tip').tooltip();
 
@@ -279,12 +310,17 @@ $(document).ready(function(){
     return false;
   });
 
+  // Bootstrap popovers
+  $('[data-toggle="popover"]').popover({
+    trigger: 'hover'
+  });
+
   // Fix sortable helper
   var fixHelper = function(e, ui) {
-      ui.children().each(function() {
-          $(this).width($(this).width());
-      });
-      return ui;
+    ui.children().each(function() {
+        $(this).width($(this).width());
+    });
+    return ui;
   };
 
   $('table.sortable').ready(function(){

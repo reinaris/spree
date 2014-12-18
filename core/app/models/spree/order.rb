@@ -456,7 +456,6 @@ module Spree
       Spree::Promotion.order_activatable?(self)
     end
 
-
     def shipped?
       %w(partial shipped).include?(shipment_state)
     end

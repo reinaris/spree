@@ -159,6 +159,8 @@ Spree::Core::Engine.add_routes do
       end
     end
 
+    resources :inventory_units, only: [:index]
+
     resources :stock_items, only: [:create, :update, :destroy]
     resources :tax_rates
 
@@ -171,6 +173,7 @@ Spree::Core::Engine.add_routes do
         get :items
         get :addresses
         put :addresses
+        get :user_info
       end
     end
   end

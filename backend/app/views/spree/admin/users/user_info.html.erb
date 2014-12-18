@@ -1,0 +1,27 @@
+<p>
+  <strong><%= @user.email %></strong>
+</p>
+
+<table class="table table-condensed no-padding-left-right">
+  <tr>
+    <td><%= Spree.t(:total_sales) %>:</td>
+    <td><%= @user.display_lifetime_value.to_html %></td>
+  </tr>
+  <tr>
+    <td><%= Spree.t(:num_orders) %>:</td>
+    <td><%= @user.order_count.to_i %></td>
+  </tr>
+  <tr>
+    <td><%= Spree.t(:average_order_value) %>:</td>
+    <td><%= @user.display_average_order_value.to_html %></td>
+  </tr>
+  <tr>
+    <td><%= Spree.t(:member_since) %>:</td>
+    <td><%= l @user.created_at.to_date %></td>
+  </tr>
+</table>
+
+<%= link_to edit_admin_user_url(@user), class: "btn btn-default btn-sm" do %>
+  <span class="icon icon-edit"></span>
+  <%= Spree.t(:edit_user) %>
+<% end %>
