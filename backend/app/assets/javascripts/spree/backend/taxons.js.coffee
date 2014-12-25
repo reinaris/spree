@@ -53,23 +53,18 @@ $(document).ready ->
             el.append(productTemplate({ product: product }))
 
   $('#taxon_products').on "click", ".js-delete-product", (e) ->
+    current_taxon_id = $("#taxon_id").val();
     product = $(this).parents(".product")
-    product_id = product.data('product-id');
+    product_id = product.data("product-id");
+    product_taxons = String(product.data("taxons")).split(',').map(Number);
+    product_index = product_taxons.indexOf(parseFloat(current_taxon_id));
+    product_taxons.splice(product_index, 1);
     $.ajax
-      url: Spree.routes.product_search + "/" + product_id, #TODO: check with Rhys
+      url: Spree.routes.product_search + "/" + product_id + "?product[taxon_ids]=" + product_taxons, #TODO: check with Rhys
+      type: "PUT",
       success: (data) ->
-        current_taxon_id = $('#taxon_id').val();
-        product_taxons = data['taxon_ids']
-        product_index = product_taxons.indexOf(parseFloat(current_taxon_id));
-        # remove the current taxon from the product taxon
-        product_taxons.splice(product_index, 1);
-        # update the product taxon_ids true the API
-        $.ajax
-          url: Spree.routes.product_search + "/" + product_id + "?product[taxon_ids]=" + product_taxons, #TODO: check with Rhys
-          type: "PUT",
-          success: (data) ->
-            product.fadeOut 400, (e) ->
-              product.remove()
+        product.fadeOut 400, (e) ->
+          product.remove()
 
   $('.js-add-product-button a').on "click", (e) ->
     $(".js-add-product").toggle();

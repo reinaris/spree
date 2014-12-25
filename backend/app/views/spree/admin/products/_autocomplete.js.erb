@@ -1,5 +1,5 @@
 <script type='text/template' id='product_template'>
-  <li id='product_{{ product.id }}' data-product-id='{{product.id }}' class='product'>
+  <li id='product_{{ product.id }}' data-product-id='{{ product.id }}' data-taxons="{{ product.taxon_ids }}" class='product'>
     <a class="sort-handle js-sort-handle"><span class="icon icon-move"></span></a>
     <div class="btn-group">
       <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
