@@ -2,24 +2,9 @@
   <%= Spree.t(:taxons) %>
 <% end %>
 
-<% content_for :page_actions do %>
-  <span class="js-add-product-button is-hidden">
-    <%= button_link_to Spree.t(:add_product), "javascript:;", { :class => "btn-success", :icon => 'add' } %>
-  </span>
-<% end %>
-
 <div class="taxon-products-view">
   <div class="form-group">
     <%= text_field_tag :taxon_id %>
-  </div>
-
-  <div class="well js-add-product is-hidden">
-    <fieldset>
-      <legend><%= Spree.t(:add_product) %></legend>
-      <div data-hook="add_product_name">
-        <%= hidden_field_tag :add_variant_id, "", :class => "variant_autocomplete" %>
-      </div>
-    </fieldset>
   </div>
 
   <ul id="taxon_products" class="taxon"></ul>

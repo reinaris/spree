@@ -43,10 +43,8 @@ $(document).ready ->
       success: (data) ->
         el.empty();
         if data.products.length == 0
-          $(".js-add-product-button").hide();
           $('#taxon_products').html("<div class='alert alert-info'>" + Spree.translations.no_results + "</div>")
         else
-          $(".js-add-product-button").show();
           for product in data.products
             if product.master.images[0] != undefined && product.master.images[0].small_url != undefined
               product.image = product.master.images[0].small_url
@@ -65,8 +63,5 @@ $(document).ready ->
       success: (data) ->
         product.fadeOut 400, (e) ->
           product.remove()
-
-  $('.js-add-product-button a').on "click", (e) ->
-    $(".js-add-product").toggle();
 
   $(".variant_autocomplete").variantAutocomplete();
