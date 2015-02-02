@@ -173,9 +173,13 @@ Spree::Core::Engine.add_routes do
         get :items
         get :addresses
         put :addresses
-        get :user_info
       end
     end
+
+    get 'panels/user', to: "panels#user", as: :panel_user
+    get 'panels/order', to: "panels#order", as: :panel_order
+    get 'panels/shipment', to: "panels#shipment", as: :panel_shipment
+
   end
 
   get '/admin', to: 'admin/root#index', as: :admin

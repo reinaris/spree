@@ -10,8 +10,6 @@ module Spree
       before_action :load_roles
       before_action :extract_roles_from_params, only: [:create, :update]
 
-      layout :determine_layout
-
       def index
         respond_with(@collection) do |format|
           format.html
@@ -89,10 +87,6 @@ module Spree
         Spree.user_class
       end
 
-      def user_info
-        respond_with @user
-      end
-
       protected
 
         def collection
@@ -162,10 +156,6 @@ module Spree
 
       def load_roles
         @roles = Spree::Role.all
-      end
-
-      def determine_layout
-        return false if action_name == "user_info"
       end
     end
   end

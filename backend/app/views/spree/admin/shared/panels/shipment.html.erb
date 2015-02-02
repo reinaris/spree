@@ -1,0 +1,22 @@
+<% content_for :panel_title do %>
+  <%= @shipment.number %>
+<% end %>
+
+<table class="table table-condensed">
+  <tr>
+    <td width="40%"><%= Spree.t(:tracking) %>:</td>
+    <td><%= @shipment.tracking %></td>
+  </tr>
+  <tr>
+    <td><%= Spree.t(:shipped_at) %>:</td>
+    <td><%= @shipment.shipped_at.to_date if @shipment.shipped_at %></td>
+  </tr>
+  <tr>
+    <td><%= Spree.t(:state) %>:</td>
+    <td>
+      <span class="state label label-<%= @shipment.state %>">
+        <%= Spree.t(@shipment.state, :scope => :shipment_states, :default => [:missing, "none"]) %>
+      </span>
+    </td>
+  </tr>
+</table>

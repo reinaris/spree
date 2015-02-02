@@ -1,0 +1,17 @@
+<div class="panel panel-default">
+  <% if content_for?(:panel_title) %>
+    <div class="panel-heading">
+      <a href="javascript:;" class="pull-right" data-ransack-field="<%= @ransack_field %>">
+        <span class="icon icon-delete js-delete-filter"></span>
+      </a>
+      <h3 class="panel-title">
+        <%= yield :panel_title %>
+      </h3>
+    </div>
+  <% end %>
+  <div class="panel-body">
+    <div class="js-user-data-content">
+      <%= yield %>
+    </div>
+  </div>
+</div>

@@ -148,30 +148,13 @@
                   </span>
                 <% end %>
               </td>
-              <td class="actions actions-1">
-                <%= link_to "javascript:;", class: "btn btn-default btn-sm js-user-data-show", data: { id: order.user.id } do %>
-                  <span class="icon icon-user"></span>
-                <% end if order.user %>
-              </td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
-    <div class="col-md-3 js-user-data" style="display: none;">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <a href="javascript:;" class="pull-right js-user-data-hide">
-              <span class="icon icon-delete"></span>
-            </a>
-            <%= Spree.t(:user_details) %>
-          </h3>
-        </div>
-        <div class="panel-body">
-          <div class="js-user-data-content"></div>
-        </div>
-      </div>
+    <div class="col-md-3 js-panels" style="display: none;">
+
     </div>
   </div>
 <% else %>
@@ -181,29 +164,3 @@
 <% end %>
 
 <%= render :partial => 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
-
-<% content_for :head do %>
-  <%= javascript_tag do -%>
-    $(document).ready(function() {
-      $(".js-user-data-show").click(function(){
-        var user_id = $(this).data("id");
-        $.ajax({
-          url: "/admin/users/" + user_id + "/user_info",
-          success: function(data){
-            $(".js-user-data").show();
-            $(".js-user-data-content").html(data);
-            $(".js-table-data").removeClass("col-md-12");
-            $(".js-table-data").addClass("col-md-9");
-          }
-        });
-      });
-
-      $(".js-user-data-hide").click(function(){
-        $(".js-user-data").hide();
-        $(".js-table-data").addClass("col-md-12");
-        $(".js-table-data").removeClass("col-md-9");
-      });
-
-    });
-  <% end -%>
-<% end %>
