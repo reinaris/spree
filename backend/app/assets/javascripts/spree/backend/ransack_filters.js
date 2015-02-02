@@ -8,8 +8,6 @@ jQuery(function($) {
     }
   });
 
-  console.log(active_filters);
-
   // Clickable ransack filters
   $(".js-add-filter").click(function() {
     var ransack_field = $(this).data("ransack-field");
@@ -74,9 +72,9 @@ function requestData(url, ransack_value, ransack_field, index){
 
 function processData(data){
   if(!$(".js-panels").length){
-    $("#main-part").removeClass("col-sm-9 col-md-10");
-    $("#main-part").addClass("col-sm-7 col-md-7");
-    $('<div class="col-sm-2 col-md-3"><div class="panel-group js-panels" id="accordion" role="tablist" aria-multiselectable="true"></div></div>').insertAfter("#main-part");
+    $("#content").removeClass("col-sm-12");
+    $("#content").addClass("col-sm-9");
+    $('<div class="col-sm-3"><div class="panel-group js-panels" id="accordion" role="tablist" aria-multiselectable="true"></div></div>').insertAfter("#content");
   }
   $(".js-panels").append(data);
   $(".js-table-data").removeClass("col-md-12");

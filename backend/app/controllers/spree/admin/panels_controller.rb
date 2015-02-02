@@ -31,7 +31,7 @@ module Spree
         end
 
         def panel_identifiers
-          @panel_first = (params[:index].to_f == 1)
+          @panel_first = (params[:index].to_f == 0)
           @panel_name = "panel_#{ params[:ransack_field] }"
           @panel_heading = "heading_#{ params[:ransack_field] }"
         end
