@@ -8,6 +8,9 @@ module Spree
       set_callback :load_collection, :after, :search
 
       def index
+        @order_ids = @collection.map(&:order_id).uniq
+        @show_by_order = (params[:q][:order_email_cont].present? && @order_ids.count > 1)
+
         respond_with(@collection)
       end
 
@@ -31,7 +34,6 @@ module Spree
 
         def search
           params[:q] ||= {}
-          params[:q][:status_cont] = 'pending' unless params[:q][:status_cont]
 
           @search = @collection.ransack(params[:q])
           @collection = @search.result.includes(:order, :shipment)

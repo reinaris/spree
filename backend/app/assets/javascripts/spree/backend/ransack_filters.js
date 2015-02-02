@@ -1,3 +1,5 @@
+// Clickable ransack filters
+
 jQuery(function($) {
   var active_filters = [];
   $(".js-filterable").each(function(index){
@@ -8,7 +10,6 @@ jQuery(function($) {
     }
   });
 
-  // Clickable ransack filters
   $(".js-add-filter").click(function() {
     var ransack_field = $(this).data("ransack-field");
     var ransack_value = $(this).data("ransack-value");
@@ -22,13 +23,13 @@ jQuery(function($) {
     var ransack_value = val[1];
     var filter = filterHTML(ransack_field, ransack_value);
 
-    addFilterPanel(ransack_field, ransack_value, index);
+    addFilterPanel(ransack_field, ransack_value);
     $(".js-filters").show();
     $(".js-filters").append(filter);
   });
 
   if($(".js-filters .js-filter").length > 1){
-    var remove_all_filters = '<a class="js-remove-all-filters label label-error">Delete all</a>';
+    var remove_all_filters = '<a class="js-remove-all-filters label label-error">Remove all</a>';
     $(".js-filters").append(remove_all_filters);
   }
 
@@ -48,19 +49,21 @@ $(document).on("click", ".js-delete-filter", function() {
   $("#table-filter form").submit();
 });
 
-function addFilterPanel(ransack_field, ransack_value, index){
+var added_filters = 0;
+function addFilterPanel(ransack_field, ransack_value){
   if(ransack_field.indexOf("order_email") > -1){
-    requestData(Spree.routes.panel_user, ransack_value, ransack_field, index);
+    requestData(Spree.routes.panel_user, ransack_value, ransack_field, added_filters);
   }
   if(ransack_field.indexOf("shipment_number") > -1){
-    requestData(Spree.routes.panel_shipment, ransack_value, ransack_field, index);
+    requestData(Spree.routes.panel_shipment, ransack_value, ransack_field, added_filters);
   }
   if(ransack_field.indexOf("order_number") > -1){
-    requestData(Spree.routes.panel_order, ransack_value, ransack_field, index);
+    requestData(Spree.routes.panel_order, ransack_value, ransack_field, added_filters);
   }
 }
 
 function requestData(url, ransack_value, ransack_field, index){
+  added_filters++;
   $.ajax({
     url: url,
     data: { identifier: ransack_value, ransack_field: ransack_field, index: index },

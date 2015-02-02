@@ -2,12 +2,6 @@
   <%= Spree.t(:inventory) %>
 <% end %>
 
-<% content_for :page_tabs do %>
-  <li role="presentation" class="active"><a href="#">Unshipped</a></li>
-  <li role="presentation"><a href="#">Shipped</a></li>
-  <li role="presentation"><a href="#">On hand</a></li>
-<% end %>
-
 <% content_for :table_filter do %>
   <div data-hook="admin_orders_index_search">
     <%= search_form_for [:admin, @search] do |f| %>
@@ -81,75 +75,13 @@
 <%= render :partial => 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
 
 <% if @collection.present? %>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>
-          <%= check_box_tag "temp_index_checkbox_main",'1', false, :class => 'js-index-checkbox-main' %>
-        </th>
-        <th><%= Spree.t(:date) %></th>
-        <th colspan="2"><%= Spree.t(:item) %></th>
-        <th></th>
-        <th><%= Spree.t(:email) %></th>
-        <th><%= Spree.t(:name) %></th>
-        <th><%= Spree.t(:zipcode) %></th>
-        <th><%= Spree.t(:status) %></th>
-        <th><%= Spree.t(:order) %></th>
-        <th><%= Spree.t(:shipment) %></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @collection.each do |inventory_unit| %>
-        <% order = Spree::Order.find(inventory_unit.order_id) %>
-        <% shipment = Spree::Shipment.where(id: inventory_unit.shipment_id).first %>
-        <tr>
-          <td class="row-checkbox">
-            <%= check_box_tag "temp_index_checkbox_main",'1', false, :class => 'js-index-checkbox' %>
-          </td>
-          <td><%= l(order.completed_at).to_date %></td>
-          <td class="image"><%= mini_image inventory_unit.variant, class: "thumbnail" %></td>
-          <td>
-            <%= inventory_unit.variant.name %><br/>
-            <small><%= inventory_unit.variant.options_text %></small>
-          </td>
-          <td class="no-padding-left no-padding-right">
-            <% unless order.user %>
-              <span class="label label-info"><%= Spree.t(:guest) %></span>
-            <% end %>
-          </td>
-          <td>
-            <span class="filterable-text js-add-filter" data-ransack-field="q_order_email_cont" data-ransack-value="<%= order.email %>">
-              <% if order.user %>
-                <%= content_tag :span, order.email, data: { toggle: "popover", placement: "top", html: true, content: popover_user_info(order.user, order) } %>
-              <% else %>
-                <%= content_tag :span, order.email, data: { toggle: "popover", placement: "top", html: true, content: popover_user_info(false, order) } %>
-              <% end %>
-            </span>
-          </td>
-          <td><%= order.bill_address.full_name %></td>
-          <td><%= order.ship_address.zipcode %></td>
-          <td>
-            <span class="label label-<%= inventory_unit.state.downcase %> filterable-text js-add-filter" data-ransack-field="q_state_eq" data-ransack-value="<%= inventory_unit.state %>">
-              <%= Spree.t("state_machine_states.#{inventory_unit.state}") %>
-            </span>
-          </td>
-          <td>
-            <span class="filterable-text js-add-filter" data-ransack-field="q_order_number_eq" data-ransack-value="<%= order.number %>">
-              <%= content_tag :span, order.number, data: { toggle: "popover", placement: "top", html: true, content: popover_order_info(order) } %>
-            </span>
-          </td>
-          <td>
-            <% if shipment %>
-              <span class="filterable-text js-add-filter" data-ransack-field="q_shipment_number_eq" data-ransack-value="<%= shipment.number %>">
-                <%= content_tag :span, shipment.number, data: { toggle: "popover", placement: "top", html: true, content: popover_shipment_info(shipment) } %>
-              </span>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <% if @show_by_order %>
+    <% @order_ids.each do |order_id| %>
+      <%= render partial: 'table', locals: { collection: @collection.where(order_id: order_id) } %>
+    <% end %>
+  <% else %>
+    <%= render partial: 'table', locals: { collection: @collection } %>
+  <% end %>
 <% else %>
   <div class="alert alert-info no-objects-found">
     <%= Spree.t(:not_foud) %>
