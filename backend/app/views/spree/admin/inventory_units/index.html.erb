@@ -28,13 +28,13 @@
       <div class="col-md-3">
         <div class="form-group">
           <%= label_tag :order_email_cont, Spree.t(:email) %>
-          <%= f.text_field :order_email_cont, class: 'form-control js-quick-search-target js-presentable-filter' %>
+          <%= f.text_field :order_email_cont, class: 'form-control js-quick-search-target js-filterable' %>
         </div>
       </div>
       <div class="col-md-3">
         <div class="form-group">
           <%= label_tag :q_state_eq, Spree.t(:status) %>
-          <%= f.select :state_eq, Spree::InventoryUnit.state_machines[:state].states.collect {|s| [Spree.t("state_machine_states.#{s.name}"), s.value]}, {:include_blank => true}, :class => 'select2 js-presentable-filter' %>
+          <%= f.select :state_eq, Spree::InventoryUnit.state_machines[:state].states.collect {|s| [Spree.t("state_machine_states.#{s.name}"), s.value]}, {:include_blank => true}, :class => 'select2 js-filterable' %>
         </div>
       </div>
     </div>
@@ -42,13 +42,13 @@
       <div class="col-md-3">
         <div class="form-group">
           <%= label_tag :order_number_eq, Spree.t(:order) %>
-          <%= f.text_field :order_number_eq, class: 'form-control js-presentable-filter' %>
+          <%= f.text_field :order_number_eq, class: 'form-control js-filterable' %>
         </div>
       </div>
       <div class="col-md-3">
         <div class="form-group">
           <%= label_tag :shipment_number_eq, Spree.t(:shipment) %>
-          <%= f.text_field :shipment_number_eq, class: 'form-control js-presentable-filter' %>
+          <%= f.text_field :shipment_number_eq, class: 'form-control js-filterable' %>
         </div>
       </div>
     </div>
@@ -78,14 +78,12 @@
   </div>
 </div>
 
-<div class="table-active-filters js-filters"></div>
-
 <%= render :partial => 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
 
 <% if @collection.present? %>
   <div class="row">
     <div class="col-md-12 js-table-data">
-      <table class="table" id="listing_documents">
+      <table class="table">
         <thead>
           <tr>
             <th>
@@ -187,32 +185,6 @@
 <% content_for :head do %>
   <%= javascript_tag do -%>
     $(document).ready(function() {
-      $(".js-add-filter").click(function() {
-        var ransack_field = $(this).data("ransack-field");
-        var ransack_value = $(this).data("ransack-value");
-
-        $("#" + ransack_field).val(ransack_value);
-        $("#table-filter form").submit();
-      });
-
-      $(document).on("click", ".js-delete-filter", function() {
-        var ransack_field = $(this).parents(".js-filter").data("ransack-field");
-
-        $("#" + ransack_field).val('');
-        $("#table-filter form").submit();
-      });
-
-      $(".js-presentable-filter").each(function(){
-        if($(this).val()){
-          var ransack_field = $(this).attr("id");
-          var ransack_value = $(this).val();
-          var filter = '<span class="js-filter label label-default" data-ransack-field="' + ransack_field + '">' + ransack_value + '<span class="icon icon-delete js-delete-filter"></span></span>';
-
-          $(".js-filters").show();
-          $(".js-filters").append(filter);
-        }
-      });
-
       $(".js-user-data-show").click(function(){
         var user_id = $(this).data("id");
         $.ajax({
