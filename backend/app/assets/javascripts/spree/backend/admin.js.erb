@@ -18,18 +18,21 @@ Hopefully, this will evolve into a propper class.
 jQuery(function($) {
 
   $('.js-index-checkbox-main').click(function(){
+    var $table = $(this).parents("table");
     if($(this).prop('checked') == true){
-      $(".js-index-checkbox").prop('checked', true);
+      $(".js-index-checkbox", $table).prop('checked', true);
     } else {
-      $(".js-index-checkbox").prop('checked', false);
+      $(".js-index-checkbox", $table).prop('checked', false);
     }
     showHideBatchActions();
   });
 
   $('.row-checkbox input').change(function(){
     showHideBatchActions();
+    var $table = $(this).parents("table");
+
     if($(this).prop('checked') == false){
-      $(".js-index-checkbox-main").prop('checked', false);
+      $(".js-index-checkbox-main", $table).prop('checked', false);
     }
   });
 
