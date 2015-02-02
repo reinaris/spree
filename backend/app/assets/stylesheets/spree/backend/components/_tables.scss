@@ -25,6 +25,11 @@ table.table {
           color: white; // hidden, but space is reserved for the icon
           cursor: pointer;
         }
+        &.image {
+          .thumbnail {
+            margin-bottom: 0;
+          }
+        }
       }
       &:hover td .filterable {
         color: #666;
