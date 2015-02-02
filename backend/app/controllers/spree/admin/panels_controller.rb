@@ -4,6 +4,7 @@ module Spree
       layout "spree/layouts/panel"
 
       before_action :set_ransack_field
+      before_action :panel_identifiers
 
       def user
         @user = Spree::User.find_by_email(params[:identifier])
@@ -27,6 +28,12 @@ module Spree
 
         def set_ransack_field
           @ransack_field = params[:ransack_field]
+        end
+
+        def panel_identifiers
+          @panel_first = (params[:index].to_f == 1)
+          @panel_name = "panel_#{ params[:ransack_field] }"
+          @panel_heading = "heading_#{ params[:ransack_field] }"
         end
 
     end
