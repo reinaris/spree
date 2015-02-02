@@ -20,6 +20,7 @@
 .label-failed,
 .label-considered_risky,
 .label-backordered,
+.label-returned,
 .label-error {
   background-color: $brand-danger;
 }
@@ -27,7 +28,6 @@
 // Orange
 .label-pending,
 .label-awaiting_return,
-.label-returned,
 .label-credit_owed,
 .label-balance_due,
 .label-backorder,
@@ -41,7 +41,7 @@
 .label-void,
 .label-inactive,
 .label-notice,
-.label-on-hand,
+.label-on_hand,
 .label-partial {
   background-color: $brand-warning;
 

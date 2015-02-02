@@ -25,6 +25,10 @@ table.table {
           color: white; // hidden, but space is reserved for the icon
           cursor: pointer;
         }
+        .filterable-text {
+          border-bottom: 1px dashed #666;
+          cursor: pointer;
+        }
         &.image {
           .thumbnail {
             margin-bottom: 0;
