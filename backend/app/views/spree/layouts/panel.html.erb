@@ -1,9 +1,6 @@
 <div class="panel panel-default">
   <% if content_for?(:panel_title) %>
     <div class="panel-heading" role="tab" id="<%= @panel_heading %>">
-      <a href="javascript:;" class="pull-right" data-ransack-field="<%= @ransack_field %>">
-        <span class="icon icon-delete js-delete-filter"></span>
-      </a>
       <h3 class="panel-title">
         <a class="<%= "collapsed" unless @panel_first %>" data-toggle="collapse" data-parent="#accordion" href="#<%= @panel_name %>" aria-expanded="<%= @panel_first %>" aria-controls="<%= @panel_name %>">
           <%= yield :panel_title %>
@@ -13,9 +10,7 @@
   <% end %>
   <div id="<%= @panel_name %>" class="panel-collapse collapse <%= "in" if @panel_first %>" role="tabpanel" aria-labelledby="<%= @panel_heading %>">
     <div class="panel-body">
-      <div class="js-user-data-content">
-        <%= yield %>
-      </div>
+      <%= yield %>
     </div>
   </div>
 </div>

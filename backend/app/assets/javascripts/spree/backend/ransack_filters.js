@@ -59,6 +59,8 @@ function addFilterPanel(ransack_field, ransack_value){
   }
   if(ransack_field.indexOf("order_number") > -1){
     requestData(Spree.routes.panel_order, ransack_value, ransack_field, added_filters);
+    requestData(Spree.routes.panel_return_authorizations, ransack_value, ransack_field + "_return_authorizations", added_filters);
+    requestData(Spree.routes.panel_customer_returns, ransack_value, ransack_field + "_customer_returns", added_filters);
   }
 }
 

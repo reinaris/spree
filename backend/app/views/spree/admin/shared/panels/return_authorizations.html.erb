@@ -1,0 +1,22 @@
+<% content_for :panel_title do %>
+  <%= Spree.t(:return_authorizations) %> <span class="badge badge-default"><%= @return_authorizations.count %></span>
+<% end %>
+
+<table class="table table-condensed no-margin-bottom">
+  <thead>
+    <tr>
+      <th><%= Spree.t(:rma_number) %></th>
+      <th><%= Spree.t(:status) %></th>
+      <th><%= Spree.t(:pre_tax_total) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @return_authorizations.each do |return_authorization| %>
+      <tr id="<%= spree_dom_id(return_authorization) %>" data-hook="rma_row">
+        <td><%= link_to return_authorization.number, edit_admin_order_return_authorization_url(return_authorization.order, return_authorization) %></td>
+        <td><%= Spree.t(return_authorization.state.downcase) %></td>
+        <td><%= return_authorization.display_pre_tax_total.to_html %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

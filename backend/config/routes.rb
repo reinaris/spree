@@ -178,6 +178,8 @@ Spree::Core::Engine.add_routes do
 
     get 'panels/user', to: "panels#user", as: :panel_user
     get 'panels/order', to: "panels#order", as: :panel_order
+    get 'panels/return_authorizations', to: "panels#return_authorizations", as: :panel_return_authorizations
+    get 'panels/customer_returns', to: "panels#customer_returns", as: :panel_customer_returns
     get 'panels/shipment', to: "panels#shipment", as: :panel_shipment
 
   end

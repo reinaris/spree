@@ -31,6 +31,8 @@ Spree.routes.variants_api = Spree.pathFor('api/variants')
 Spree.routes.panel_user = Spree.pathFor('admin/panels/user')
 Spree.routes.panel_order = Spree.pathFor('admin/panels/order')
 Spree.routes.panel_shipment = Spree.pathFor('admin/panels/shipment')
+Spree.routes.panel_return_authorizations = Spree.pathFor('admin/panels/return_authorizations')
+Spree.routes.panel_customer_returns = Spree.pathFor('admin/panels/customer_returns')
 
 Spree.routes.payments_api = function(order_id) {
   return Spree.pathFor('api/orders/' + order_id + '/payments')

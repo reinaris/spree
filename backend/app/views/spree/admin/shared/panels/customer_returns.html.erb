@@ -1,0 +1,28 @@
+<% content_for :panel_title do %>
+  <%= Spree.t(:customer_returns) %> <span class="badge badge-default"><%= @customer_returns.count %></span>
+<% end %>
+
+<table class="table table-condensed no-margin-bottom">
+  <thead>
+    <tr>
+      <th><%= Spree.t(:return_number) %></th>
+      <th><%= Spree.t(:pre_tax_total) %></th>
+      <th><%= Spree.t(:status) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @customer_returns.each do |customer_return| %>
+      <tr data-hook="customer_return_row">
+        <td><%= link_to customer_return.number, edit_admin_order_customer_return_path(@order, customer_return) %></td>
+        <td><%= customer_return.display_pre_tax_total.to_html %></td>
+        <td>
+          <% if customer_return.fully_reimbursed? %>
+            <span class="label label-success"><%= Spree.t(:reimbursed) %></span>
+          <% else %>
+            <span class="label label-info"><%= Spree.t(:incomplete) %></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
