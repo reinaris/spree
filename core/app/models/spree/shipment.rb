@@ -262,6 +262,10 @@ module Spree
       selected_shipping_rate.try(:shipping_method) || shipping_rates.first.try(:shipping_method)
     end
 
+    def shipment_address
+      self.try(:address) || order.ship_address
+    end
+
     def tax_category
       selected_shipping_rate.try(:tax_rate).try(:tax_category)
     end
@@ -344,7 +348,9 @@ module Spree
       end
 
       transaction do
-        new_shipment = order.shipments.create!(stock_location: stock_location)
+        new_shipment = order.shipments.create!(
+          stock_location: stock_location,
+          address: self.address)
 
         order.contents.remove(variant, quantity, {shipment: self})
         order.contents.add(variant, quantity, {shipment: new_shipment})
@@ -381,7 +387,7 @@ module Spree
       end
 
       def can_get_rates?
-        order.ship_address && order.ship_address.valid?
+        shipment_address && shipment_address.valid?
       end
 
       def manifest_restock(item)
