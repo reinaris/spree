@@ -1,0 +1,62 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:variants) %>
+<% end %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_variants_index_filters">
+    <%= search_form_for [:admin, @search], url: spree.admin_variants_index_path do |f| %>
+      <div class="form-group">
+        <%= f.label :sku_cont, Spree.t(:sku) %>
+        <%= f.text_field :sku_cont, class: "form-control js-quick-search-target" %>
+      </div>
+      <div data-hook="admin_variants_index_filters_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+
+<% if @collection.any? %>
+  <table class="table">
+    <% if !resource_index_xhr? %>
+      <thead>
+        <tr>
+          <th><%= Spree.t(:sku) %></th>
+          <th><%= Spree.t(:product) %></th>
+          <th><%= Spree.t(:option_text) %></th>
+          <th><%= Spree.t(:price) %></th>
+        </tr>
+      </thead>
+    <% end %>
+    <tbody>
+      <% @collection.each do |variant| %>
+        <tr data-hook="variant_row">
+          <td>
+            <% if !resource_index_xhr? %>
+              <%= link_to variant.sku, 'javascript:;', data: { id: variant.id } %>
+            <% else %>
+              <%= variant.sku %>
+            <% end %>
+          </td>
+          <td>
+            <% if variant.product && !resource_index_xhr? %>
+              <%= variant.product.try(:name) %>
+            <% elsif variant.product %>
+              <%= link_to variant.product.try(:name), edit_admin_product_path(variant.product) %>
+            <% end %>
+          </td>
+          <td><%= variant.options_text %></td>
+          <td><%= variant.display_price.to_html %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: Spree::Variant.human(count: :many)) %>.
+  </div>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
