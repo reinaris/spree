@@ -22,6 +22,16 @@ module Spree
           end
         end.join("").html_safe
       end
+
+      def product_picker_collection product_ids
+        # returns an array with values for the product picker collection
+        # sorted by name
+
+        product_ids.collect do |id, index|
+          product = Spree::Product.find(id)
+          Hashie::Mash.new(id: product.id, name: product.name)
+        end.sort { |a,b| a.name <=> b.name }
+      end
     end
   end
 end

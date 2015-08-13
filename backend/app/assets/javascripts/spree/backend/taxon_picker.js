@@ -28,21 +28,9 @@ $(document).ready(function() {
   });
 });
 
-function taxonPickerValuesAsArray(values) {
-  /* make sure we return a valid array and dont return [","] */
-
-  values = values.split(',');
-
-  if (values.length == 1 && values[0] == '') {
-    values = [];
-  }
-
-  return values;
-}
-
 function taxonPickerCollectionRow(id, name, pretty_name) {
   return '<tr class="success">' +
-           '<td>2110</td>' +
+           '<td>' + id + '</td>' +
            '<td>' + name + '</td>' +
            '<td>' + pretty_name + '</td>' +
            '<td>' +
@@ -57,7 +45,7 @@ $(document).on('click', '.js-taxon-picker-index tbody td a', function(e) {
   var TAXON_ID = $(this).data('id');
   var TAXON_NAME = $(this).data('name');
   var TAXON_PRETTY_NAME = $(this).data('pretty-name');
-  var CURRENT_TAXON_IDS = taxonPickerValuesAsArray($('.js-taxon-picker-target').val());
+  var CURRENT_TAXON_IDS = valuesAsCleanArray($('.js-taxon-picker-target').val());
   var ALLREADY_EXIST = CURRENT_TAXON_IDS.indexOf(('' + TAXON_ID)); /* Taxon ID as a string */
 
   if (ALLREADY_EXIST == -1) {
@@ -80,7 +68,7 @@ $(document).on('click', '.js-delete-from-taxon-picker-target', function(e) {
 
   var TAXON_ID = $(this).data('id');
   var TAXON_NAME = $(this).data('name');
-  var CURRENT_TAXON_IDS = taxonPickerValuesAsArray($('.js-taxon-picker-target').val());
+  var CURRENT_TAXON_IDS = valuesAsCleanArray($('.js-taxon-picker-target').val());
 
   CURRENT_TAXON_IDS = jQuery.grep(CURRENT_TAXON_IDS, function(value) {
     return value != TAXON_ID;

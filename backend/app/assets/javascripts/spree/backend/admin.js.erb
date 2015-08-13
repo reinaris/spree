@@ -368,3 +368,15 @@ $(document).ready(function(){
       });
   }
 });
+
+function valuesAsCleanArray(values) {
+  /* make sure we return a valid array and dont return [","] */
+
+  values = values.split(',');
+
+  if (values.length == 1 && values[0] == '') {
+    values = [];
+  }
+
+  return values;
+}

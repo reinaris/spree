@@ -15,7 +15,10 @@ module Spree
 
       def index
         session[:return_to] = request.url
-        respond_with(@collection)
+        respond_with(@collection) do |format|
+          format.html { render layout: !request.xhr? }
+          format.json { render json: json_data }
+        end
       end
 
       def update
